@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, ChangeEvent, FormEvent } from "react";
+import { addBookToDatabase } from "../util/db-utils"; // Adjust the path based on your setup
 
-// Define the type for book details explicitly
 type BookDetails = {
   title: string;
   author: string;
@@ -10,13 +10,12 @@ type BookDetails = {
   publishDate: string;
   tags: string;
   condition: string;
+  isbn?: string;
 };
 
 export default function AddBook() {
   const [isbn, setIsbn] = useState("");
   const [manualEntry, setManualEntry] = useState(false);
-
-  // Explicitly type the bookDetails state
   const [bookDetails, setBookDetails] = useState<BookDetails>({
     title: "",
     author: "",
@@ -24,36 +23,47 @@ export default function AddBook() {
     publishDate: "",
     tags: "",
     condition: "",
+    isbn: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Handler for <input> elements
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setBookDetails(prev => ({ ...prev, [name as keyof BookDetails]: value }));
+    setBookDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handler for <select> elements
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setBookDetails(prev => ({ ...prev, [name as keyof BookDetails]: value }));
+    setBookDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Book Details:", manualEntry ? bookDetails : { isbn });
-    alert("Book added successfully!");
-  };
+    setIsSubmitting(true);
 
-  const handleIsbnSearch = () => {
-    // Simulate ISBN lookup (replace with actual API call)
-    setBookDetails({
-      title: "Sample Book Title",
-      author: "Sample Author",
-      owner: "John Doe",
-      publishDate: "2022-01-01",
-      tags: "Fiction, Adventure",
-      condition: "New",
-    });
+    try {
+      await addBookToDatabase({
+        ...bookDetails,
+        tags: bookDetails.tags.split(",").map((tag) => tag.trim()), // Convert tags to array
+      });
+      alert("Book added successfully!");
+      // Reset the form
+      setBookDetails({
+        title: "",
+        author: "",
+        owner: "",
+        publishDate: "",
+        tags: "",
+        condition: "",
+        isbn: "",
+      });
+      setIsbn("");
+    } catch (error) {
+      console.error("Error adding book:", error);
+      alert("Failed to add the book.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -73,10 +83,10 @@ export default function AddBook() {
               />
               <button
                 type="button"
-                onClick={handleIsbnSearch}
+                onClick={() => setManualEntry(true)}
                 className="bg-blue-600 text-white py-2 px-4 rounded-md"
               >
-                Search
+                Autofill
               </button>
             </div>
           </div>
@@ -99,7 +109,7 @@ export default function AddBook() {
                 type="text"
                 name="title"
                 value={bookDetails.title}
-                onChange={handleInputChange} // For <input>
+                onChange={handleInputChange}
                 className="border rounded-md p-2 w-full"
                 placeholder="Enter title"
               />
@@ -110,7 +120,7 @@ export default function AddBook() {
                 type="text"
                 name="author"
                 value={bookDetails.author}
-                onChange={handleInputChange} // For <input>
+                onChange={handleInputChange}
                 className="border rounded-md p-2 w-full"
                 placeholder="Enter author"
               />
@@ -121,7 +131,7 @@ export default function AddBook() {
                 type="text"
                 name="owner"
                 value={bookDetails.owner}
-                onChange={handleInputChange} // For <input>
+                onChange={handleInputChange}
                 className="border rounded-md p-2 w-full"
                 placeholder="Enter owner"
               />
@@ -132,7 +142,7 @@ export default function AddBook() {
                 type="date"
                 name="publishDate"
                 value={bookDetails.publishDate}
-                onChange={handleInputChange} // For <input>
+                onChange={handleInputChange}
                 className="border rounded-md p-2 w-full"
               />
             </div>
@@ -142,9 +152,9 @@ export default function AddBook() {
                 type="text"
                 name="tags"
                 value={bookDetails.tags}
-                onChange={handleInputChange} // For <input>
+                onChange={handleInputChange}
                 className="border rounded-md p-2 w-full"
-                placeholder="Enter tags (comma separated)"
+                placeholder="Enter tags (comma-separated)"
               />
             </div>
             <div>
@@ -152,7 +162,7 @@ export default function AddBook() {
               <select
                 name="condition"
                 value={bookDetails.condition}
-                onChange={handleSelectChange} // For <select>
+                onChange={handleSelectChange}
                 className="border rounded-md p-2 w-full"
               >
                 <option value="">Select condition</option>
@@ -168,9 +178,10 @@ export default function AddBook() {
 
         <button
           type="submit"
-          className="bg-green-600 text-white py-2 px-4 rounded-md w-full"
+          className={`bg-green-600 text-white py-2 px-4 rounded-md w-full ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+          disabled={isSubmitting}
         >
-          Add Book
+          {isSubmitting ? "Adding..." : "Add Book"}
         </button>
       </form>
     </div>

@@ -1,8 +1,20 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgTable,
+  varchar,
+  timestamp,
+  json,
+} from "drizzle-orm/pg-core";
 
-export const usersTable = pgTable("users", {
+// Books table
+export const booksTable = pgTable("books", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar({ length: 255 }).notNull(),
-  age: integer().notNull(),
-  email: varchar({ length: 255 }).notNull().unique(),
+  title: varchar({ length: 255 }).notNull(),
+  author: varchar({ length: 255 }).notNull(),
+  owner: varchar({ length: 255 }).notNull(),
+  publishDate: timestamp().notNull(),
+  tags: json().notNull(), // Use JSON to store the tags array
+  condition: varchar({ length: 50 }).notNull(),
+  isbn: varchar({ length: 13 }),
+  createdAt: timestamp().defaultNow().notNull(),
 });
