@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import Link from "next/link";
 import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";

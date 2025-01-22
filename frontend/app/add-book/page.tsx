@@ -1,11 +1,23 @@
 'use client';
 
-import { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
+
+// Define the type for book details explicitly
+type BookDetails = {
+  title: string;
+  author: string;
+  owner: string;
+  publishDate: string;
+  tags: string;
+  condition: string;
+};
 
 export default function AddBook() {
   const [isbn, setIsbn] = useState("");
   const [manualEntry, setManualEntry] = useState(false);
-  const [bookDetails, setBookDetails] = useState({
+
+  // Explicitly type the bookDetails state
+  const [bookDetails, setBookDetails] = useState<BookDetails>({
     title: "",
     author: "",
     owner: "",
@@ -14,12 +26,19 @@ export default function AddBook() {
     condition: "",
   });
 
-  const handleInputChange = (e) => {
+  // Handler for <input> elements
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setBookDetails({ ...bookDetails, [name]: value });
+    setBookDetails(prev => ({ ...prev, [name as keyof BookDetails]: value }));
   };
 
-  const handleSubmit = (e) => {
+  // Handler for <select> elements
+  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setBookDetails(prev => ({ ...prev, [name as keyof BookDetails]: value }));
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Book Details:", manualEntry ? bookDetails : { isbn });
     alert("Book added successfully!");
@@ -64,9 +83,7 @@ export default function AddBook() {
         )}
 
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Manual Entry
-          </label>
+          <label className="block text-sm font-medium mb-1">Manual Entry</label>
           <input
             type="checkbox"
             checked={manualEntry}
@@ -82,7 +99,7 @@ export default function AddBook() {
                 type="text"
                 name="title"
                 value={bookDetails.title}
-                onChange={handleInputChange}
+                onChange={handleInputChange} // For <input>
                 className="border rounded-md p-2 w-full"
                 placeholder="Enter title"
               />
@@ -93,7 +110,7 @@ export default function AddBook() {
                 type="text"
                 name="author"
                 value={bookDetails.author}
-                onChange={handleInputChange}
+                onChange={handleInputChange} // For <input>
                 className="border rounded-md p-2 w-full"
                 placeholder="Enter author"
               />
@@ -104,7 +121,7 @@ export default function AddBook() {
                 type="text"
                 name="owner"
                 value={bookDetails.owner}
-                onChange={handleInputChange}
+                onChange={handleInputChange} // For <input>
                 className="border rounded-md p-2 w-full"
                 placeholder="Enter owner"
               />
@@ -115,7 +132,7 @@ export default function AddBook() {
                 type="date"
                 name="publishDate"
                 value={bookDetails.publishDate}
-                onChange={handleInputChange}
+                onChange={handleInputChange} // For <input>
                 className="border rounded-md p-2 w-full"
               />
             </div>
@@ -125,7 +142,7 @@ export default function AddBook() {
                 type="text"
                 name="tags"
                 value={bookDetails.tags}
-                onChange={handleInputChange}
+                onChange={handleInputChange} // For <input>
                 className="border rounded-md p-2 w-full"
                 placeholder="Enter tags (comma separated)"
               />
@@ -135,7 +152,7 @@ export default function AddBook() {
               <select
                 name="condition"
                 value={bookDetails.condition}
-                onChange={handleInputChange}
+                onChange={handleSelectChange} // For <select>
                 className="border rounded-md p-2 w-full"
               >
                 <option value="">Select condition</option>

@@ -25,7 +25,7 @@ export default function AddReview() {
   const [selectedBook, setSelectedBook] = useState(mockBookData[0].id);
   const [reviewText, setReviewText] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     console.log("Review submitted:", {
       book: mockBookData.find((book) => book.id === selectedBook),

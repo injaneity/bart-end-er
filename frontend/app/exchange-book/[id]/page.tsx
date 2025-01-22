@@ -1,30 +1,24 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const mockUserBooks = [
-  {
-    id: 1,
-    title: "The Catcher in the Rye",
-    condition: "Good",
-  },
-  {
-    id: 2,
-    title: "The Hobbit",
-    condition: "Like New",
-  },
-  {
-    id: 3,
-    title: "Brave New World",
-    condition: "Fair",
-  },
-];
+interface PageProps {
+  params: Promise<{ id?: string }>;
+}
 
-export default function OfferExchange({ params }) {
+const OfferExchange: React.FC<PageProps> = ({ params }) => {
+  const [book, setBook] = useState<string | undefined>(undefined);
   const [selectedBookId, setSelectedBookId] = useState(""); // Default to an empty string
-  const bookToExchange = params?.book || "Unknown Book"; // Get the book to exchange from props or query
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    params.then((resolvedParams) => {
+      setBook(resolvedParams.id);
+    });
+  }, [params]);
+
+  const bookToExchange = book || "Unknown Book"; // Get the book to exchange from params
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const offeredBook = mockUserBooks.find((book) => book.id === Number(selectedBookId));
     console.log("Exchange Offer Submitted:", {
@@ -67,4 +61,24 @@ export default function OfferExchange({ params }) {
       </form>
     </div>
   );
-}
+};
+
+export default OfferExchange;
+
+const mockUserBooks = [
+  {
+    id: 1,
+    title: "The Catcher in the Rye",
+    condition: "Good",
+  },
+  {
+    id: 2,
+    title: "The Hobbit",
+    condition: "Like New",
+  },
+  {
+    id: 3,
+    title: "Brave New World",
+    condition: "Fair",
+  },
+];
