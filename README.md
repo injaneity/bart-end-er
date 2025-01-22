@@ -50,14 +50,20 @@ These were all really cool ideas, unfortunately I was forced to prioritise given
 
 # Key Design Decisions
 
+<img width="833" alt="image" src="https://github.com/user-attachments/assets/9601013c-aa58-484b-9725-41c3e54bf96e" />
+One of the main goals was to have a UI that would seem welcoming rather than overly formal and therefore intimidating. Neobrutalism had the distinct advatange of looking unique, whilst being built directly on top of the shadcn library that I could extensively use. Note that due to time constraints, not all elements were converted to neobrutalism as I focused on consolidating functionality.
+
 In the end, the core feature of the landing page was inspired partly by the "for you page" of Tiktok and Instagram, whilst having the slightly more formal nature similar to LinkedIn -- a design choice meant to focus on the actual content of the reviews, rather than eye catching visuals and audio that I felt would take away from the purpose of a physical book exchange app in the first place. The goal was to have as much focus as possible on the landing page, and as few bells and whistles elsewhere.
 
 Clerk was used for a simple to set up, yet secure and seamless authentication option. The choice to deploy rather than working exclusively on localhost was to show that deploying fully working prototypes is definitely achieveable under a 24 hour time frame, relying on some convenient technology.
 
 # Project Plan
 First 24 hours: MVP, some unfinished main features
+
 Next 24 hours: Complete all core features, such as CV model for book verification etc
+
 Next Month: Work on social media features (messaging, making reposts visible and giving posts weight)
+
 Onwards: Implement loan system, and other fun / QoL features
 
   
