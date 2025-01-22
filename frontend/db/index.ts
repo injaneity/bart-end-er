@@ -13,14 +13,13 @@ async function main() {
     owner: 'user@example.com',
     publishDate: new Date('1937-09-21'),
     tags: ['fantasy', 'adventure', 'classic'],
-    condition: 'Like New',
-    isbn: '978-0261103344',
-    createdAt: new Date(),
+    condition: 'new',
+    isbn: '978-0-345-33968-3',
   };
 
-  // Insert a new book into the database
+  // Insert the new book into the database
   await db.insert(booksTable).values(newBook);
-  console.log('New book added to the database!');
+  console.log('Book added successfully!');
 
   // Select all books from the database
   const books = await db.select().from(booksTable);
@@ -43,12 +42,14 @@ async function main() {
   await db
     .update(booksTable)
     .set({ condition: 'Good' })
-    .where(eq(booksTable.isbn, newBook.isbn));
+    .where(eq(booksTable.isbn, newBook.isbn!));
   console.log('Book condition updated!');
 
   // Delete the book from the database
-  await db.delete(booksTable).where(eq(booksTable.isbn, newBook.isbn));
+  await db.delete(booksTable).where(eq(booksTable.isbn, newBook.isbn!));
   console.log('Book deleted!');
 }
 
-main();
+main().catch((err) => {
+  console.error('Error:', err);
+});
