@@ -19,7 +19,7 @@ Bartender is a peer to peer book exchange application built with NextJS and Mong
 - Profile page
 - Clerk secure sign in and authentication with Google / Github
 
-From a barebones UI/UX perspective, almost everything that was **necessary** was present in the final prototype, with a strong focus on the community features such as public reviews and reposting. However, there were many features planned out that could not be executed (more details discussed below)
+From a barebones UI/UX perspective, almost everything that was **necessary** was present in the final prototype, with a strong focus on the community features such as public reviews and reposting. However, there were many features planned out that could not be executed (more details discussed below). On a side note, I really thought that the ISBN open library API was a really cool way to do data entry.
 
 Planned Functionality (can be completed within the next 24 hours):
 - Accepting & executing book exchanges
@@ -51,6 +51,7 @@ These were all really cool ideas, unfortunately I was forced to prioritise given
 # Key Design Decisions
 
 <img width="833" alt="image" src="https://github.com/user-attachments/assets/9601013c-aa58-484b-9725-41c3e54bf96e" />
+
 One of the main goals was to have a UI that would seem welcoming rather than overly formal and therefore intimidating. Neobrutalism had the distinct advatange of looking unique, whilst being built directly on top of the shadcn library that I could extensively use. Note that due to time constraints, not all elements were converted to neobrutalism as I focused on consolidating functionality.
 
 In the end, the core feature of the landing page was inspired partly by the "for you page" of Tiktok and Instagram, whilst having the slightly more formal nature similar to LinkedIn -- a design choice meant to focus on the actual content of the reviews, rather than eye catching visuals and audio that I felt would take away from the purpose of a physical book exchange app in the first place. The goal was to have as much focus as possible on the landing page, and as few bells and whistles elsewhere.
