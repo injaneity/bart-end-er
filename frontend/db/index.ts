@@ -1,41 +1,54 @@
 import 'dotenv/config';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/vercel-postgres';
-import { usersTable } from './schema';
+import { booksTable } from './schema';
 
 async function main() {
   const db = drizzle();
 
-  const user: typeof usersTable.$inferInsert = {
-    name: 'John',
-    age: 30,
-    email: 'john@example.com',
+  // New book details to insert into the database
+  const newBook: typeof booksTable.$inferInsert = {
+    title: 'The Hobbit',
+    author: 'J.R.R. Tolkien',
+    owner: 'user@example.com',
+    publishDate: new Date('1937-09-21'),
+    tags: ['fantasy', 'adventure', 'classic'],
+    condition: 'Like New',
+    isbn: '978-0261103344',
+    createdAt: new Date(),
   };
 
-  await db.insert(usersTable).values(user);
-  console.log('New user created!')
+  // Insert a new book into the database
+  await db.insert(booksTable).values(newBook);
+  console.log('New book added to the database!');
 
-  const users = await db.select().from(usersTable);
-  console.log('Getting all users from the database: ', users)
+  // Select all books from the database
+  const books = await db.select().from(booksTable);
+  console.log('Getting all books from the database:', books);
   /*
-  const users: {
+  const books: {
     id: number;
-    name: string;
-    age: number;
-    email: string;
+    title: string;
+    author: string;
+    owner: string;
+    publishDate: Date;
+    tags: string[];
+    condition: string;
+    isbn: string | null;
+    createdAt: Date;
   }[]
   */
 
+  // Update the condition of the book
   await db
-    .update(usersTable)
-    .set({
-      age: 31,
-    })
-    .where(eq(usersTable.email, user.email));
-  console.log('User info updated!')
+    .update(booksTable)
+    .set({ condition: 'Good' })
+    .where(eq(booksTable.isbn, newBook.isbn));
+  console.log('Book condition updated!');
 
-  await db.delete(usersTable).where(eq(usersTable.email, user.email));
-  console.log('User deleted!')
+  // Delete the book from the database
+  await db.delete(booksTable).where(eq(booksTable.isbn, newBook.isbn));
+  console.log('Book deleted!');
 }
 
 main();
